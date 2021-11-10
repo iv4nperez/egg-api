@@ -42,14 +42,13 @@ exports.usuariosGet = usuariosGet;
 const usuariosGetByCorreo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { correo } = req.query;
     const query = { estado: true, creadoPor: correo };
-    const { limite = 10, desde = 0 } = req.query;
-    const [total, usuarios] = yield Promise.all([
-        usuario_1.default.countDocuments(query),
-        usuario_1.default.find(query)
-            .skip(Number(desde))
-            .limit(Number(limite))
-    ]);
-    res.json({ total, usuarios });
+    const { limit = 10, page = 1 } = req.query;
+    const usuarios = yield usuario_1.default.paginate(query, {
+        limit: Number(limit),
+        page: Number(page),
+        sort: { _id: 'ASC' }
+    });
+    res.json({ usuarios });
 });
 exports.usuariosGetByCorreo = usuariosGetByCorreo;
 const usuariosPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {

@@ -1,4 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
+import mongoosePaginate  from 'mongoose-paginate-v2'
 import { IUsuario } from '../interfaces'
 
 const UsuarioSchema = new Schema({
@@ -42,5 +43,7 @@ const UsuarioSchema = new Schema({
     }
 
 });
+
+UsuarioSchema.plugin(mongoosePaginate)
 
 export default mongoose.model<IUsuario>('Usuario', UsuarioSchema);

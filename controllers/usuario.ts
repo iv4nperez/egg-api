@@ -24,16 +24,16 @@ export const usuariosGetByCorreo = async (req: Request, res: Response): Promise<
     const { correo } = req.query;
 
     const query = { estado: true, creadoPor: correo };
-    const { limite = 10, desde = 0 } = req.query;
+    const { limit = 10, page = 1 } = req.query;
 
-    const [total, usuarios] = await Promise.all([
-        Usuario.countDocuments(query),
-        Usuario.find(query)
-            .skip(Number(desde))
-            .limit(Number(limite))
-    ])
+    const usuarios = await Usuario.paginate(query, {
+        limit: Number(limit),
+        page: Number(page),
+        sort: { _id: 'ASC' }
+    })
 
-    res.json({ total, usuarios });
+
+    res.json({ usuarios });
 }
 
 export const usuariosPost = async (req: Request, res: Response): Promise<void> => {
@@ -79,11 +79,11 @@ export const usuariosPut = async (req: Request, res: Response): Promise<void> =>
     res.json(user);
 }
 
-export const usuarioGetValidCorreo = async ( req: Request, res: Response ) => {
+export const usuarioGetValidCorreo = async (req: Request, res: Response) => {
     const { correo } = req.params;
     const result = await Usuario.find({ correo: correo, estado: true })
 
-    if( result.length > 0 ){
+    if (result.length > 0) {
         res.json({
             correoEnUso: true,
             message: 'El correo ya se encuentra registrado, Intenta con uno diferente'

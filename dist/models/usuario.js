@@ -18,8 +18,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
+const mongoose_paginate_v2_1 = __importDefault(require("mongoose-paginate-v2"));
 const UsuarioSchema = new mongoose_1.Schema({
     nombre: {
         type: String,
@@ -60,5 +64,6 @@ const UsuarioSchema = new mongoose_1.Schema({
         default: false,
     }
 });
+UsuarioSchema.plugin(mongoose_paginate_v2_1.default);
 exports.default = mongoose_1.default.model('Usuario', UsuarioSchema);
 //# sourceMappingURL=usuario.js.map
