@@ -1,8 +1,5 @@
 import express, { Application } from 'express'
 import cors from "cors";
-const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('../../swagger.json');
-
 const { connection } = require('../database/config');
 
 import authRoutes from '../routes/auth';
@@ -31,7 +28,7 @@ class Server {
         this.middlewares();
         // definir rutas
         this.routes();
-        
+
     }
 
     async connectionDB() {
