@@ -15,7 +15,6 @@ class Server {
     private app: Application;
     private port: string;
     private server: any;
-    private io: any;
     
     private apiPaths = {
         auth:     '/api/auth',
@@ -26,15 +25,13 @@ class Server {
         this.app    = express();
         this.port   = process.env.PORT || '9000'; 
         this.server = require('http').createServer( this.app );
-        this.io     = require('socket.io')( this.server );
         //connection db
         this.connectionDB();
         //middleware
         this.middlewares();
         // definir rutas
         this.routes();
-
-        this.swagger();
+        
     }
 
     async connectionDB() {
@@ -48,8 +45,6 @@ class Server {
         this.app.use( express.json() );
         //Carpeta publica
         this.app.use( express.static('public') );
-        // Sockets
-        this.sockets();
     }
 
     routes(){
@@ -59,20 +54,6 @@ class Server {
         // this.app.use( this.apiPaths.category, categoryRoutes )
     }
     
-    sockets(){
-        this.io.on('connection', ( socket: any ) => {
-            console.log('cliente conectado')
-
-            socket.on('disconnect', () => {
-                console.log('cliente desconectado')
-            });
-        });
-    }
-
-    swagger(){
-        this.app.use( '/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument) )
-    }
-
     listen() {
         this.server.listen( this.port, () => {
             console.log(`Servidor corriendo en puerto ${ this.port }` )
